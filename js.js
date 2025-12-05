@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name        Games
+// @name         Zula Casino Random Games
 // @namespace    http://tampermonkey.net/
 // @version      1.3
-// @description  nav bar
+// @description  Add a random games button to Zula Casino nav bar
 // @author       You
 // @match        https://www.zulacasino.com/*
 // @match        file:///*/ZulaRandom/*
@@ -525,55 +525,194 @@
             }
 
             .random-games-popup::-webkit-scrollbar-track {
-                background: rgba(255, 255, 255, 0.1);
+                background: #f5f5f5;
                 border-radius: 10px;
             }
 
             .random-games-popup::-webkit-scrollbar-thumb {
-                background: #ff980c;
+                background: #bdbdbd;
                 border-radius: 10px;
             }
 
             .random-games-popup::-webkit-scrollbar-thumb:hover {
-                background: #ffb23f;
+                background: #9e9e9e;
             }
 
-            /* Responsive */
-            @media (max-width: 768px) {
+            /* Responsive - Tablet */
+            @media (max-width: 1024px) and (min-width: 769px) {
                 .random-games-popup {
-                    width: 96%;
-                    border-radius: 8px;
+                    width: 90%;
+                    max-width: 800px;
+                }
+
+                .random-games-grid {
+                    grid-template-columns: repeat(3, 1fr);
+                    gap: 1.5rem;
+                }
+
+                .random-games-content {
+                    padding: 2.5rem 2rem 2rem;
+                }
+            }
+
+            /* Hide Favorites button on mobile */
+            @media (max-width: 768px) {
+                .category-item.hide-favorites-mobile {
+                    display: none !important;
+                }
+            }
+
+            /* Responsive - Mobile */
+            @media (max-width: 768px) {
+                .random-games-overlay {
+                    padding: 1rem;
+                    align-items: flex-end;
+                    padding-top: 0;
+                }
+
+                .random-games-popup {
+                    width: 100%;
+                    max-width: 100%;
+                    max-height: fit-content;
+                    border-radius: 16px 16px 0 0;
+                    margin-top: auto;
+                    margin-bottom: 0;
+                    transform: translateY(100%);
+                }
+
+                .random-games-overlay.active .random-games-popup {
+                    transform: translateY(0);
+                }
+
+                /* Add spacing between icon and text in random button */
+                .random-games-btn .icon-wrapper {
+                    margin-right: 12px !important;
                 }
 
                 .random-games-close {
                     top: 12px;
                     right: 12px;
-                    width: 36px;
-                    height: 36px;
+                    width: 40px;
+                    height: 40px;
+                    background: rgba(220, 53, 69, 0.9);
+                    backdrop-filter: blur(10px);
+                }
+
+                .random-games-close svg {
+                    width: 22px;
+                    height: 22px;
                 }
 
                 .random-games-content {
-                    padding: 2rem 1.5rem 1.5rem;
+                    padding: 1rem 0.75rem 0.75rem;
+                    max-height: none;
+                    overflow: visible;
+                    -webkit-overflow-scrolling: touch;
                 }
 
                 .random-games-grid {
-                    grid-template-columns: 1fr;
-                    gap: 1.5rem;
+                    display: grid;
+                    grid-template-columns: repeat(3, 1fr);
+                    gap: 0.75rem;
+                    overflow: visible;
+                }
+
+                .random-game-item {
+                    width: 100%;
+                }
+
+                .random-game-image-wrapper {
+                    border-radius: 8px;
+                    margin-bottom: 0.4rem;
+                    aspect-ratio: 163 / 219;
+                }
+
+                .random-game-name {
+                    font-size: 0.75rem;
+                    margin-top: 0.25rem;
+                    padding: 0;
+                    line-height: 1.2;
+                    font-weight: 500;
                 }
 
                 .random-games-footer {
-                    padding: 1.25rem 1.5rem 1.5rem;
+                    padding: 0.875rem 1rem;
+                    border-top: 1px solid #e0e0e0;
+                    background: #fff;
+                    position: relative;
                 }
 
                 .random-games-reroll {
                     width: 100%;
                     justify-content: center;
-                    padding: 0.75rem 1.5rem;
+                    padding: 0.875rem 1.5rem;
+                    font-size: 0.9375rem;
+                    border-radius: 8px;
+                    min-height: 48px;
+                }
+
+                .random-games-reroll svg {
+                    width: 20px;
+                    height: 20px;
+                }
+            }
+
+            /* Small mobile devices */
+            @media (max-width: 480px) {
+                .random-games-overlay {
+                    padding: 0.5rem;
+                    padding-top: 1rem;
+                }
+
+                .random-games-popup {
+                    border-radius: 12px 12px 0 0;
+                }
+
+                .random-games-content {
+                    padding: 0.875rem 0.5rem 0.5rem;
+                }
+
+                .random-games-grid {
+                    gap: 0.625rem;
+                }
+
+                .random-game-item {
+                    width: 100%;
+                }
+
+                .random-game-name {
+                    font-size: 0.7rem;
+                }
+
+                .random-games-footer {
+                    padding: 0.75rem;
+                }
+
+                .random-games-reroll {
+                    padding: 0.75rem 1.25rem;
                     font-size: 0.875rem;
                 }
             }
         `;
         document.head.appendChild(style);
+    }
+
+    // Hide Favorites button on mobile
+    function hideFavoritesOnMobile() {
+        if (window.innerWidth <= 768) {
+            const categoryItems = document.querySelectorAll('.category-item');
+            categoryItems.forEach(item => {
+                const nameSpan = item.querySelector('.category-name');
+                if (nameSpan && nameSpan.textContent.trim().toLowerCase() === 'favorites') {
+                    item.classList.add('hide-favorites-mobile');
+                }
+            });
+        } else {
+            // Remove the class on desktop
+            document.querySelectorAll('.hide-favorites-mobile').forEach(item => {
+                item.classList.remove('hide-favorites-mobile');
+            });
+        }
     }
 
     // Initialize
@@ -584,6 +723,10 @@
         // Load games data
         await loadGames();
 
+        // Hide Favorites on mobile
+        hideFavoritesOnMobile();
+        window.addEventListener('resize', hideFavoritesOnMobile);
+
         // Try to insert button
         let inserted = insertButton();
         if (!inserted) {
@@ -591,6 +734,8 @@
             const observer = new MutationObserver(() => {
                 if (insertButton()) {
                     observer.disconnect();
+                    // Hide favorites after button is inserted
+                    hideFavoritesOnMobile();
                 }
             });
 
@@ -604,6 +749,7 @@
                 if (!document.querySelector('.random-games-btn')) {
                     insertButton();
                 }
+                hideFavoritesOnMobile();
             }, 2000);
         }
     }
