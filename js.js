@@ -176,7 +176,6 @@
                 
                 const link = document.createElement('a');
                 link.href = game.gameURL;
-                link.target = '_blank';
                 link.className = 'random-game-link';
                 
                 const imageWrapper = document.createElement('div');
@@ -368,7 +367,7 @@
                 justify-content: center;
                 border-radius: 50%;
                 transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-                z-index: 10;
+                z-index: 1000;
                 box-shadow: 0 2px 8px rgba(220, 53, 69, 0.3);
             }
 
@@ -391,6 +390,8 @@
                 padding: 3rem 2.5rem 2rem;
                 overflow-y: auto;
                 max-height: calc(92vh - 120px);
+                position: relative;
+                z-index: 1;
             }
 
             .random-games-grid {
