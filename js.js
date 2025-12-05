@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         Zula Casino Random Games
+// @name        Games
 // @namespace    http://tampermonkey.net/
 // @version      1.3
-// @description  Add a random games button to Zula Casino nav bar
+// @description  nav bar
 // @author       You
 // @match        https://www.zulacasino.com/*
 // @match        file:///*/ZulaRandom/*
