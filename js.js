@@ -1,3 +1,13 @@
+// ==UserScript==
+// @name         Spinblitz Value Replacer
+// @namespace    http://tampermonkey.net/
+// @version      1.1
+// @description  Replace 400.01 and 16050 with 900.00 on spinblitz.com
+// @match        https://www.spinblitz.com/*
+// @run-at       document-start
+// @grant        none
+// ==/UserScript==
+
 (function () {
     'use strict';
 
